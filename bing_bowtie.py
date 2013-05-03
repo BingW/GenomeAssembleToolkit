@@ -8,10 +8,12 @@
 # ./bing_bowtie.py ref.fasta R1.fastq R2.fastq out_put_path
 
 # version 0.02
-# modification: 
 # add print_help()
 # index go to index folder
 # debug out_put file_names
+
+# version 0.03
+# add "-p 3" & "--quiet"
 
 import sys
 import os
@@ -39,14 +41,18 @@ bt2_index = out_put_path+"index/"+basename
 cmd = "bowtie2-build %s %s"%(ref_fasta,bt2_index)
 
 os.system(cmd)
+print "#"*100
+print "finish build index"
+print "#"*100
 
 #run bowtie2
 out_put_sam = out_put_path+"Output.sam"
-paramters = "--local --un %s --al %s --un-conc %s --al-conc %s"\
+paramters = "--local -p 3 --quiet --un %s --al %s --un-conc %s --al-conc %s"\
         %(out_put_path+"unpaired_unaligned.fastq",\
         out_put_path+"unpaired_aligned.fastq",\
         out_put_path+"paired_unconcordantly.fastq",\
         out_put_path+"paired_concordantly.fastq")
 
-cmd = "bowtie2 -x %s -1 %s -2 %s %s -S %s"%(bt2_index,R1_fastq,R2_fastq,paramters,out_put_sam)
+cmd = "bowtie2 %s -x %s -1 %s -2 %s -S %s"%(paramters,bt2_index,R1_fastq,R2_fastq,out_put_sam)
+print cmd
 os.system(cmd)
