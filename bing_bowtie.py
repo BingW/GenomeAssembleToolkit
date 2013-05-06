@@ -15,12 +15,15 @@
 # version 0.03
 # add "-p 3" & "--quiet"
 
+# version 0.04
+# add "stderr log" output to a log file
+
 import sys
 import os
 
 def print_help():
     print "Usage:\n"
-    print "./bing_bowtie.py ref.fasta R1.fastq R2.fastq out_put_path"
+    print "./bing_bowtie.py ref.fasta R1.fastq R2.fastq out_put_path\n"
 
 try:
     assert len(sys.argv) == 5
@@ -32,6 +35,7 @@ try:
     out_put_path = sys.argv[4] if sys.argv[4].endswith("/") else sys.argv[4] + "/"
 except:
     print_help()
+    sys.exit()
 
 #build bw2 index
 basename = ref_fasta[ref_fasta.rfind("/")+1:].replace(".fasta","")
@@ -47,12 +51,14 @@ print "#"*100
 
 #run bowtie2
 out_put_sam = out_put_path+"Output.sam"
-paramters = "--local -p 3 --quiet --un %s --al %s --un-conc %s --al-conc %s"\
+log_file = out_put_path+"Stderr.log"
+paramters = "--local -p 3 --un %s --al %s --un-conc %s --al-conc %s"\
         %(out_put_path+"unpaired_unaligned.fastq",\
         out_put_path+"unpaired_aligned.fastq",\
         out_put_path+"paired_unconcordantly.fastq",\
         out_put_path+"paired_concordantly.fastq")
 
-cmd = "bowtie2 %s -x %s -1 %s -2 %s -S %s"%(paramters,bt2_index,R1_fastq,R2_fastq,out_put_sam)
+cmd = "bowtie2 %s -x %s -1 %s -2 %s -S %s 2> %s"%\
+        (paramters,bt2_index,R1_fastq,R2_fastq,out_put_sam,log_file)
 print cmd
 os.system(cmd)
