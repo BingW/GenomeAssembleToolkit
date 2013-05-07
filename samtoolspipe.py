@@ -25,6 +25,7 @@ os.system(cmd)
 #sort bamfile
 sorted_file = sam_file.replace(".sam",".sorted")
 cmd = "samtools sort %s %s"%(bam_file,sorted_file)
-#build index for bamfile
 os.system(cmd)
+#build index for bamfile
 cmd = "samtools index %s"%(sorted_file)
+os.system(cmd)
