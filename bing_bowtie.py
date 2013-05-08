@@ -73,22 +73,27 @@ def run_bowtie_singl(R,index,out_path):
     os.system(cmd)
 
 def check_paramters(argv):
-    if "-p" in argv:
-        assert len(argv) == 6
-        assert argv[2].endswith(".fasta")
-        assert argv[3].endswith(".fastq")
-        assert argv[4].endswith(".fsatq")
-    elif "-s" in argv:
-        assert len(argv) == 5
-        assert argv[2].endswith(".fasta")
-        assert argv[3].endswith(".fastq")
-    else:
-        assert len(argv) == 5
-        assert argv[1].endswith(".fasta")
-        assert argv[2].endswith(".fastq")
-        assert argv[3].endswith(".fsatq")
+    try:
+        if "-p" in argv:
+            assert len(argv) == 6
+            assert argv[2].endswith(".fasta")
+            assert argv[3].endswith(".fastq")
+            assert argv[4].endswith(".fsatq")
+        elif "-s" in argv:
+            assert len(argv) == 5
+            assert argv[2].endswith(".fasta")
+            assert argv[3].endswith(".fastq")
+        else:
+            assert len(argv) == 5
+            assert argv[1].endswith(".fasta")
+            assert argv[2].endswith(".fastq")
+            assert argv[3].endswith(".fsatq")
+    except:
+        print_help()
+        sys.exit()
 
-def mian(argv):
+
+def main(argv):
     check_paramters(argv)
 
     if "-p" in argv:
