@@ -52,7 +52,7 @@ def run_bowtie_paired(R1,R2,index,out_path):
     #run bowtie2
     out_put_sam = out_path+"Output.sam"
     log_file = out_path+"Stderr.log"
-    paramters = "--local -p 3 --un %s --al %s --un-conc %s --al-conc %s"\
+    paramters = "-p 3 --un %s --al %s --un-conc %s --al-conc %s"\
             %(out_path+"unpaired_unaligned.fastq",\
             out_path+"unpaired_aligned.fastq",\
             out_path+"paired_unconcordantly.fastq",\
@@ -78,7 +78,7 @@ def check_paramters(argv):
             assert len(argv) == 6
             assert argv[2].endswith(".fasta")
             assert argv[3].endswith(".fastq")
-            assert argv[4].endswith(".fsatq")
+            assert argv[4].endswith(".fastq")
         elif "-s" in argv:
             assert len(argv) == 5
             assert argv[2].endswith(".fasta")
@@ -87,7 +87,7 @@ def check_paramters(argv):
             assert len(argv) == 5
             assert argv[1].endswith(".fasta")
             assert argv[2].endswith(".fastq")
-            assert argv[3].endswith(".fsatq")
+            assert argv[3].endswith(".fastq")
     except:
         print_help()
         sys.exit()
