@@ -44,7 +44,7 @@ def main(argv):
     os.system(cmd)
 
 
-    cmd = "samtools index %s"%(sorted_file)
+    cmd = "samtools index %s"%(sorted_file+".bam")
     print cmd
     print "Step:3 build index for sorted by position bamfile"
     print "#"*80
@@ -59,9 +59,9 @@ def main(argv):
     os.system(cmd) 
 
 
-    cmd = "samtools index %s"%(sorted_file)
+    cmd = "samtools index %s"%(sorted_file+".bam")
     print cmd
-    print "Step:4 build index for sorted by name bamfile"
+    print "Step:5 build index for sorted by name bamfile"
     print "#"*80
     os.system(cmd)
 
