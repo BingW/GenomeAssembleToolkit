@@ -23,6 +23,9 @@
 # add "-s" for unpaired reads bowtie
 # more structured
 
+# version 0.15
+# can take fasta as input
+
 import sys
 import os
 
@@ -58,16 +61,28 @@ def run_bowtie_paired(R1,R2,index,out_path):
             out_path+"paired_unconcordantly.fastq",\
             out_path+"paired_concordantly.fastq")
 
-    cmd = "bowtie2 %s -x %s -1 %s -2 %s -S %s 2> %s"%\
+    if R.endswith(".fasta"):
+        paramters+= " -f"
+
+    cmd = "bowtie2 %s -x %s -1 %s -2 %s -S %s 2>%s"%\
             (paramters,index,R1,R2,out_put_sam,log_file)
     print cmd
     os.system(cmd)
 
 def run_bowtie_singl(R,index,out_path):
-    out_put_sam = out_path+"Output.sam"
-    log_file = out_path+"Stderr.log"
     paramters = "--local -p 3"
-    cmd = "bowtie2 %s -x %s -U %s -S %s 2> %s"%\
+    if R.endswith(".fasta"):
+        paramters+= " -f"
+        out_put_sam = out_path+R[R.rfind("/"):].replace(".fasta",".sam")
+        log_file = out_path+R[R.rfind("/"):].replace(".fasta",".stderr")
+    elif R.endswith(".fastq"):
+        paramters+= " -f"
+        out_put_sam = out_path+R[R.rfind("/"):].replace(".fastq",".sam")
+        log_file = out_path+R[R.rfind("/"):].replace(".fastq",".stderr")
+    else:
+        sys.stderr.write("un recognized file format %s"%R)
+        sys.exit()
+    cmd = "bowtie2 %s -x %s -U %s -S %s 2>%s"%\
             (paramters,index,R,out_put_sam,log_file)
     print cmd
     os.system(cmd)
@@ -77,17 +92,12 @@ def check_paramters(argv):
         if "-p" in argv:
             assert len(argv) == 6
             assert argv[2].endswith(".fasta")
-            assert argv[3].endswith(".fastq")
-            assert argv[4].endswith(".fastq")
         elif "-s" in argv:
             assert len(argv) == 5
             assert argv[2].endswith(".fasta")
-            assert argv[3].endswith(".fastq")
         else:
             assert len(argv) == 5
             assert argv[1].endswith(".fasta")
-            assert argv[2].endswith(".fastq")
-            assert argv[3].endswith(".fastq")
     except:
         print_help()
         sys.exit()
